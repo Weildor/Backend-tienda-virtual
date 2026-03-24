@@ -1,6 +1,6 @@
 # Documentación de Backend - Tienda Virtual
 
-**Tu Nombre / Weildor** *5C DESARROLLO DE SOFTWARE MULTIPLATAFORMA - Universidad Tecnológica de Xicotepec de Juárez*
+**Dorian / Weildor** *5C DESARROLLO DE SOFTWARE MULTIPLATAFORMA - Universidad Tecnológica de Xicotepec de Juárez*
 
 ---
 
