@@ -26,14 +26,21 @@ module.exports = (sequelize, DataTypes) => {
   }
   
   tbc_carrito_detalle.init({
-    id_carrito: DataTypes.STRING,
-    id_producto: DataTypes.STRING,
-    cantidad: DataTypes.STRING,
-    precio_unitario: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'tbc_carrito_detalle',
-  });
+  id_carrito: {
+    type: DataTypes.INTEGER, // Cambié STRING por INTEGER porque son llaves foráneas
+    field: 'id_carrito'      // Esto le dice: "en la DB búscalo exactamente así"
+  },
+  id_producto: {
+    type: DataTypes.INTEGER, 
+    field: 'id_producto'     // ¡Aquí es donde matamos el error de la "s" extra!
+  },
+  cantidad: DataTypes.INTEGER,
+  precio_unitario: DataTypes.DECIMAL(10, 2) // Mejor usar Decimal para dinero
+}, {
+  sequelize,
+  modelName: 'tbc_carrito_detalle',
+  tableName: 'tbc_carrito_detalles' // Asegúrate que coincida con Workbench
+});
   
   // ¡Ya eliminamos la basura de aquí abajo que estaba causando el error!
   

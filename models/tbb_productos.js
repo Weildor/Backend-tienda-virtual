@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
 
       // Un producto puede estar en MUCHOS detalles de carrito
       tbb_productos.hasMany(models.tbc_carrito_detalle, {
-        foreignKey: 'id_productos',
+        foreignKey: 'id_producto',
         as: 'detalles_carrito'
       });
     }
@@ -20,9 +20,9 @@ module.exports = (sequelize, DataTypes) => {
   tbb_productos.init({
     nombre: DataTypes.STRING,
     descripcion: DataTypes.STRING,
-    precio: DataTypes.STRING,
-    stock: DataTypes.STRING,
-    id_categoria: DataTypes.STRING
+    precio: DataTypes.DECIMAL(10, 2), // Para manejar dinero
+    stock: DataTypes.INTEGER,         // Para manejar cantidades enteras
+    id_categoria: DataTypes.INTEGER   // Para que coincida con la llave de categorías
   }, {
     sequelize,
     modelName: 'tbb_productos',

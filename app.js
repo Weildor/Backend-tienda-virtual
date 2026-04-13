@@ -18,6 +18,13 @@ app.get('/', (req, res)=>res.status(200).send({
 }))
 //creando rutas
 require('./routes/route_categorias')(app);
+// Importar las rutas
+require('./routes/route_categorias')(app);
+require('./routes/route_usuarios')(app);
+require('./routes/route_productos')(app);
+require('./routes/route_carrito')(app);
+require('./routes/route_carrito_detalle')(app);
+
 const port = parseInt(process.env.PORT, 10) || 8000;
 app.set('port', port);
 const server = http.createServer(app);
