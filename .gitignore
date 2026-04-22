@@ -21,3 +21,9 @@ build/
 Thumbs.db
 
 sequelize model:create --name tbc_usuarios --attributes nombre:string,direccion:string,password:string,email:string,telefono:string,rol:string,fecha_registro:string
+#DB_HOST=localhost
+#DB_USER=
+#DB_PASSWORD=
+#DB_PORT=3307
+#PORT=8000
+#DB_NAME=db_tienda
