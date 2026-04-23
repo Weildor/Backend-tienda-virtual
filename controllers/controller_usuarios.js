@@ -16,39 +16,51 @@ module.exports = {
             .catch(error => res.status(400).send(error));
     },
 
-    // NUEVO: Método de Login actualizado para devolver el ROL
+    // MÉTODO DE LOGIN CORREGIDO
     login(req, res) {
-        const { email, password } = req.body;
-        return tbc_Usuario.findOne({ where: { email: email } })
+        return tbc_Usuario
+            .findOne({
+                where: { email: req.body.email }
+            })
             .then(usuario => {
                 if (!usuario) {
                     return res.status(404).send({ message: 'Usuario no encontrado' });
                 }
-                if (usuario.password !== password) {
+
+                // Validación de contraseña simple
+                if (usuario.password !== req.body.password) {
                     return res.status(401).send({ message: 'Contraseña incorrecta' });
                 }
 
-                // Opcional: También puedes guardar el rol dentro del payload del token si lo deseas
-                const payload = { id: usuario.id, email: usuario.email, rol: usuario.rol };
-                const token = jwt.sign(payload, process.env.JWT_SECRET || 'mi_clave_super_secreta', {
-                    expiresIn: '24h'
-                });
+                // Generamos un token real usando la librería jwt
+                // Usamos una clave secreta (puedes cambiar 'secreto_super_seguro')
+                const token = jwt.sign(
+                    { id: usuario.id, rol: usuario.rol }, 
+                    'secreto_super_seguro', 
+                    { expiresIn: '24h' }
+                );
 
-                return res.status(200).send({
+                // ENVIAMOS TODA LA INFORMACIÓN NECESARIA AL FRONTEND
+                res.status(200).send({
                     message: 'Autenticación exitosa',
-                    token: token,
-                    rol: usuario.rol // 👈 ¡AQUÍ ESTÁ LA CLAVE! Ahora enviamos el rol al frontend
+                    token: token,   // Token real generado
+                    rol: usuario.rol,
+                    id: usuario.id  // El ID que faltaba para filtrar el Carrito
                 });
             })
-            .catch(error => res.status(400).send(error));
+            .catch(error => {
+                console.error("Error en login:", error);
+                res.status(400).send(error);
+            });
     },
 
-    // Otros métodos...
+    // Otros métodos CRUD
     find(req, res) {
         return tbc_Usuario.findByPk(req.params.id)
             .then(usuario => usuario ? res.status(200).send(usuario) : res.status(404).send({message: 'No encontrado'}))
             .catch(error => res.status(400).send(error));
     },
+
     update(req, res) {
         return tbc_Usuario.findByPk(req.params.id)
             .then(usuario => {
@@ -56,6 +68,7 @@ module.exports = {
                 return usuario.update(req.body).then(updated => res.status(200).send(updated));
             }).catch(error => res.status(400).send(error));
     },
+
     delete(req, res) {
         return tbc_Usuario.findByPk(req.params.id)
             .then(usuario => {
