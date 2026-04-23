@@ -16,7 +16,7 @@ module.exports = {
             .catch(error => res.status(400).send(error));
     },
 
-    // NUEVO: Método de Login para generar el Token
+    // NUEVO: Método de Login actualizado para devolver el ROL
     login(req, res) {
         const { email, password } = req.body;
         return tbc_Usuario.findOne({ where: { email: email } })
@@ -28,14 +28,16 @@ module.exports = {
                     return res.status(401).send({ message: 'Contraseña incorrecta' });
                 }
 
-                const payload = { id: usuario.id, email: usuario.email };
+                // Opcional: También puedes guardar el rol dentro del payload del token si lo deseas
+                const payload = { id: usuario.id, email: usuario.email, rol: usuario.rol };
                 const token = jwt.sign(payload, process.env.JWT_SECRET || 'mi_clave_super_secreta', {
                     expiresIn: '24h'
                 });
 
                 return res.status(200).send({
                     message: 'Autenticación exitosa',
-                    token: token
+                    token: token,
+                    rol: usuario.rol // 👈 ¡AQUÍ ESTÁ LA CLAVE! Ahora enviamos el rol al frontend
                 });
             })
             .catch(error => res.status(400).send(error));
